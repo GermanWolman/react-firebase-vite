@@ -1,33 +1,36 @@
 import { useContext } from "react";
+import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
 import { UserContext } from "../context/UserProvider";
-import { formValidate } from "../utils/formValidate";
-import { useForm } from "react-hook-form";
 import { errorsFirebase } from "../utils/errorsFirebase";
+import { formValidate } from "../utils/formValidate";
 
 import FormAlert from "../components/FormAlert";
 import FormInput from "../components/FormInput";
 
-const Login = () => {
+const Register = () => {
   const navegate = useNavigate();
-  const { loginUser } = useContext(UserContext);
-  const { required, patternEmail, minLength, validateTrim } = formValidate();
+  const { registerUser } = useContext(UserContext);
+  const { required, patternEmail, minLength, validateTrim, validateEquals } =
+    formValidate();
 
   const {
     register,
     handleSubmit,
     formState: { errors },
+    getValues,
     setError,
   } = useForm({
     defaultValues: {
       email: "gwolman2424@gmail.com",
       password: "123123",
+      repassword: "123123",
     },
   });
 
   const onSubmit = async ({ email, password }) => {
     try {
-      await loginUser(email, password);
+      await registerUser(email, password);
       navegate("/");
     } catch (error) {
       const { code, message } = errorsFirebase(error);
@@ -37,7 +40,7 @@ const Login = () => {
 
   return (
     <>
-      <h1>Login</h1>
+      <h1>Register</h1>
       <form onSubmit={handleSubmit(onSubmit)}>
         <FormInput
           type="email"
@@ -49,6 +52,7 @@ const Login = () => {
         >
           <FormAlert error={errors.email} />
         </FormInput>
+
         <FormInput
           type="password"
           placeholder="Ingresa un password"
@@ -59,10 +63,20 @@ const Login = () => {
         >
           <FormAlert error={errors.password} />
         </FormInput>
-        <button type="submit">Login</button>
+
+        <FormInput
+          type="password"
+          placeholder="Repita password"
+          {...register("repassword", {
+            validate: validateEquals(getValues("password")),
+          })}
+        >
+          <FormAlert error={errors.repassword} />
+        </FormInput>
+        <button type="submit">Register</button>
       </form>
     </>
   );
 };
 
-export default Login;
+export default Register;

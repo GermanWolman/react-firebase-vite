@@ -1,43 +1,41 @@
 import { Routes, Route } from "react-router-dom";
 
-import Navbar from "./components/Navbar";
-import Home from "./routes/Home";
-import NotFound from "./routes/NotFound";
-import Protected from "./routes/Protected";
 import Login from "./routes/Login";
-
+import Home from "./routes/Home";
+import Navbar from "./components/Navbar";
 import RequireAuth from "./components/RequireAuth";
-//import { useContext } from "react";
-//import { UserContext } from "./context/UserProvider";
+import Register from "./routes/Register";
+import { useContext } from "react";
+import { UserContext } from "./context/UserProvider";
 
 const App = () => {
-  //const { user } = useContext(UserContext);
+  const { user } = useContext(UserContext);
+  if (user === false) return <p>Loading...</p>;
 
   return (
     <>
-      <Navbar />
-      <Routes>
-        <Route
-          path="/"
-          element={<Home />}
-        />
-        <Route
-          path="/login"
-          element={<Login />}
-        />
-        <Route
-          path="/protected"
-          element={
-            <RequireAuth>
-              <Protected />
-            </RequireAuth>
-          }
-        />
-        <Route
-          path="*"
-          element={<NotFound />}
-        />
-      </Routes>
+      <div className="container">
+        <Navbar />
+        <h1>APP</h1>
+        <Routes>
+          <Route
+            path="/"
+            element={
+              <RequireAuth>
+                <Home />
+              </RequireAuth>
+            }
+          />
+          <Route
+            path="/login"
+            element={<Login />}
+          />
+          <Route
+            path="/register"
+            element={<Register />}
+          />
+        </Routes>
+      </div>
     </>
   );
 };
