@@ -7,25 +7,34 @@ import RequireAuth from "./components/RequireAuth";
 import Register from "./routes/Register";
 import { useContext } from "react";
 import { UserContext } from "./context/UserProvider";
+import Layout404 from "./components/Layout404";
+import AccessContainer from "./components/AccessContainer";
 
 const App = () => {
   const { user } = useContext(UserContext);
-  if (user === false) return <p>Loading...</p>;
+
+  if (user === false) {
+    return <p>Loading...</p>;
+  }
 
   return (
     <>
-      <div className="container">
-        <Navbar />
-        <h1>APP</h1>
-        <Routes>
+      <Navbar />
+      <Routes>
+        <Route
+          path="/"
+          element={<RequireAuth />}
+        >
           <Route
-            path="/"
-            element={
-              <RequireAuth>
-                <Home />
-              </RequireAuth>
-            }
+            index
+            element={<Home />}
           />
+        </Route>
+
+        <Route
+          path="/"
+          element={<AccessContainer />}
+        >
           <Route
             path="/login"
             element={<Login />}
@@ -34,10 +43,17 @@ const App = () => {
             path="/register"
             element={<Register />}
           />
-        </Routes>
-      </div>
+        </Route>
+
+
+        <Route
+          path="*"
+          element={<Layout404 />}
+        />
+      </Routes>
     </>
   );
 };
 
 export default App;
+

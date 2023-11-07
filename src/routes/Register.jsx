@@ -7,6 +7,8 @@ import { formValidate } from "../utils/formValidate";
 
 import FormAlert from "../components/FormAlert";
 import FormInput from "../components/FormInput";
+import Title from "../components/Title";
+import Button from "../components/Button";
 
 const Register = () => {
   const navegate = useNavigate();
@@ -40,40 +42,47 @@ const Register = () => {
 
   return (
     <>
-      <h1>Register</h1>
+      <Title title="Register" />
+
       <form onSubmit={handleSubmit(onSubmit)}>
         <FormInput
           type="email"
+          label="Ingrese Email"
           placeholder="Ingresa un email"
           {...register("email", {
             required,
             pattern: patternEmail,
           })}
+          error={errors.email}
         >
           <FormAlert error={errors.email} />
         </FormInput>
 
         <FormInput
           type="password"
+          label="Ingrese Password"
           placeholder="Ingresa un password"
           {...register("password", {
             minLength,
             validate: validateTrim,
           })}
+          error={errors.password}
         >
           <FormAlert error={errors.password} />
         </FormInput>
 
         <FormInput
           type="password"
+          label="Repita Password"
           placeholder="Repita password"
           {...register("repassword", {
             validate: validateEquals(getValues("password")),
           })}
+          error={errors.repassword}
         >
           <FormAlert error={errors.repassword} />
         </FormInput>
-        <button type="submit">Register</button>
+        <Button text="Register" />
       </form>
     </>
   );

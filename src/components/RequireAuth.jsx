@@ -1,15 +1,19 @@
 import { useContext } from "react";
-import { Navigate } from "react-router-dom";
 import { UserContext } from "../context/UserProvider";
+import { Navigate, Outlet } from "react-router-dom";
 
-const RequireAuth = ({ children }) => {
+const RequireAuth = () => {
   const { user } = useContext(UserContext);
 
   if (!user) {
-    return <Navigate to="/" />;
+    return <Navigate to="/login" />;
   }
 
-  return children;
+  return (
+    <div className="container mx-auto">
+      <Outlet />
+    </div>
+  );
 };
 
 export default RequireAuth;
