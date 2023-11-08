@@ -9,6 +9,7 @@ import { useContext } from "react";
 import { UserContext } from "./context/UserProvider";
 import Layout404 from "./components/Layout404";
 import AccessContainer from "./components/AccessContainer";
+import LayoutRedirect from "./components/LayoutRedirect";
 
 const App = () => {
   const { user } = useContext(UserContext);
@@ -45,7 +46,15 @@ const App = () => {
           />
         </Route>
 
-
+        <Route
+          path="/:nanoid"
+          element={<LayoutRedirect />}
+          >
+        <Route
+            index
+            element={<Layout404 />}
+          />
+        </Route>
         <Route
           path="*"
           element={<Layout404 />}
